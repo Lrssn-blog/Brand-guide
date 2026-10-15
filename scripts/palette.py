@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
-"""Checks that the colors in Brand.md match the Lrssn color palette.
+"""Checks that the colours in Brand.md match the Lrssn website's tokens.
 
-The palette is defined in src/colors/Colors.md of the Style-guide repository.
-The check fails if a color is missing, extra or different, or if a contrast
-ratio in the contrast table does not match the colors.
+The colours are defined in the maps `$theme-light` and `$theme-dark` of
+src/styles/_variables.scss in the Lrssn-com repository.
+The check fails if a colour in Brand.md is missing from the stylesheet or has
+a different value, or if a contrast ratio in Brand.md is wrong.
 
 Usage:
-    scripts/palette.py              Fetch Colors.md from the Style-guide repo.
-    scripts/palette.py <Colors.md>  Use a local copy of Colors.md.
+    scripts/palette.py                 Fetch _variables.scss from Lrssn-com.
+    scripts/palette.py <_variables.scss>
+                                       Use a local copy of the stylesheet.
 """
 
 import pathlib
@@ -18,52 +20,69 @@ import urllib.request
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 BRAND = ROOT / 'src' / 'brand' / 'Brand.md'
-COLORS_URL = (
-    'https://raw.githubusercontent.com/Lrssn-blog/Style-guide/main/'
-    'src/colors/Colors.md'
+SOURCE_URL = (
+    'https://gitea.lrssn.se/Lrssn/Lrssn-com/raw/branch/main/'
+    'src/styles/_variables.scss'
 )
 
-# The backgrounds of the contrast table, in column order.
-BACKGROUNDS = ('White', 'Light grey', 'Dark grey', 'Black')
+# The columns of the first contrast table: the theme and the background.
+CONTRAST_COLUMNS = (
+    ('light', 'background'),
+    ('light', 'surface'),
+    ('dark', 'background'),
+    ('dark', 'surface'),
+)
 
-# A line of Colors.md ends with the HSV, HEX and RGB values of a color.
-SOURCE_LINE = re.compile(
-    r'\((\d+, \d+, \d+)\) \((#[0-9A-F]{6})\) \((\d+, \d+, \d+)\)$'
+THEMES = ('light', 'dark')
+
+# A colour token in the stylesheet, such as 'primary-color': #fc6600.
+SOURCE_TOKEN = re.compile(r"'([\w-]+)':\s*(#[0-9a-fA-F]{3,6})\b")
+# A row of a colour table: token, light and dark HEX, and the use.
+TOKEN_ROW = re.compile(
+    r'^\| `([\w-]+)` \| `(#[0-9a-f]{6})` \| `(#[0-9a-f]{6})` \| [^|]+ \|$'
 )
-# A row of the palette table: name, role, HEX, RGB and HSV.
-PALETTE_ROW = re.compile(
-    r'^\| ([^|`]+) \| [^|`]+ \| `(#[0-9A-F]{6})` \| ([\d, ]+) \| ([\d, ]+) \|$'
-)
-# A row of the contrast table: the text color and four ratios.
+# A row of the first contrast table: token and four ratios.
 CONTRAST_ROW = re.compile(
-    r'^\| ([A-Za-z ]+) \| ([\d.]+) \| ([\d.]+) \| ([\d.]+) \| ([\d.]+) \|$'
+    r'^\| `([\w-]+)` \| ([\d.]+) \| ([\d.]+) \| ([\d.]+) \| ([\d.]+) \|$'
+)
+# A row of the second contrast table: text on a fill, in both themes.
+PAIR_ROW = re.compile(
+    r'^\| `([\w-]+)` on `([\w-]+)` \| ([\d.]+) \| ([\d.]+) \|$'
 )
 
 
-def parse_source(text: str) -> dict[str, tuple[str, str]]:
-    """Returns the colors of Colors.md as {hex: (rgb, hsv)}."""
-    colors = {}
-    for line in text.splitlines():
-        match = SOURCE_LINE.search(line.strip())
-        if match:
-            hsv, hex_value, rgb = match.groups()
-            colors[hex_value] = (rgb, hsv)
-    return colors
+def expand_hex(value: str) -> str:
+    """Writes a HEX colour with six lowercase digits, such as '#ffffff'."""
+    value = value.lower()
+    if len(value) == 4:
+        return '#' + ''.join(digit * 2 for digit in value[1:])
+    return value
 
 
-def parse_palette(text: str) -> dict[str, tuple[str, str, str]]:
-    """Returns the palette table of Brand.md as {name: (hex, rgb, hsv)}."""
-    palette = {}
+def parse_theme(text: str, name: str) -> dict[str, str]:
+    """Returns the colours of the map `$<name>` of the stylesheet."""
+    match = re.search(r'\$' + re.escape(name) + r': \((.*?)\n\);', text, re.S)
+    if not match:
+        raise SystemExit(f'Found no ${name} map in the stylesheet')
+    return {
+        token: expand_hex(value)
+        for token, value in SOURCE_TOKEN.findall(match.group(1))
+    }
+
+
+def parse_tokens(text: str) -> dict[str, tuple[str, str]]:
+    """Returns the colour tables of Brand.md as {token: (light, dark)}."""
+    tokens = {}
     for line in text.splitlines():
-        match = PALETTE_ROW.match(line)
+        match = TOKEN_ROW.match(line)
         if match:
-            name, hex_value, rgb, hsv = match.groups()
-            palette[name] = (hex_value, rgb, hsv)
-    return palette
+            token, light, dark = match.groups()
+            tokens[token] = (light, dark)
+    return tokens
 
 
 def parse_contrast(text: str) -> dict[str, tuple[float, ...]]:
-    """Returns the contrast table of Brand.md as {name: ratios}."""
+    """Returns the first contrast table of Brand.md as {token: ratios}."""
     contrast = {}
     for line in text.splitlines():
         match = CONTRAST_ROW.match(line)
@@ -74,8 +93,19 @@ def parse_contrast(text: str) -> dict[str, tuple[float, ...]]:
     return contrast
 
 
+def parse_pairs(text: str) -> dict[tuple[str, str], tuple[float, float]]:
+    """Returns the second contrast table as {(text, fill): (light, dark)}."""
+    pairs = {}
+    for line in text.splitlines():
+        match = PAIR_ROW.match(line)
+        if match:
+            foreground, background, light, dark = match.groups()
+            pairs[foreground, background] = (float(light), float(dark))
+    return pairs
+
+
 def luminance(hex_value: str) -> float:
-    """Returns the WCAG relative luminance of a color such as '#D96C36'."""
+    """Returns the WCAG relative luminance of a colour such as '#fc6600'."""
     channels = []
     for start in (1, 3, 5):
         value = int(hex_value[start : start + 2], 16) / 255
@@ -88,89 +118,105 @@ def luminance(hex_value: str) -> float:
 
 
 def contrast_ratio(first: str, second: str) -> float:
-    """Returns the WCAG contrast ratio of two colors."""
+    """Returns the WCAG contrast ratio of two colours."""
     lighter, darker = sorted((luminance(first), luminance(second)))[::-1]
     return (lighter + 0.05) / (darker + 0.05)
 
 
-def check_palette(
-    source: dict[str, tuple[str, str]],
-    palette: dict[str, tuple[str, str, str]],
+def check_tokens(
+    source: dict[str, dict[str, str]],
+    tokens: dict[str, tuple[str, str]],
 ) -> list[str]:
-    """Compares the palette table with the colors of Colors.md."""
+    """Compares the colour tables with the colours of the stylesheet."""
     errors = []
-    seen = set()
-    for name, (hex_value, rgb, hsv) in palette.items():
-        seen.add(hex_value)
-        if hex_value not in source:
-            errors.append(f'{name}: {hex_value} is not in Colors.md')
-        elif source[hex_value] != (rgb, hsv):
-            want_rgb, want_hsv = source[hex_value]
-            errors.append(
-                f'{name}: RGB {rgb} and HSV {hsv} should be '
-                f'RGB {want_rgb} and HSV {want_hsv}'
-            )
-    for hex_value in source:
-        if hex_value not in seen:
-            errors.append(f'{hex_value} is in Colors.md but not in Brand.md')
+    for token, shown in tokens.items():
+        for theme, value in zip(THEMES, shown, strict=True):
+            want = source[theme].get(token)
+            if want is None:
+                errors.append(f'{token}: not in the {theme} theme')
+            elif want != value:
+                errors.append(f'{token}: {theme} is {value}, should be {want}')
     return errors
 
 
+def differs(shown: float, want: float) -> bool:
+    """Returns whether a ratio in Brand.md differs from the calculated one."""
+    return f'{shown:.2f}' != f'{want:.2f}'
+
+
 def check_contrast(
-    palette: dict[str, tuple[str, str, str]],
+    source: dict[str, dict[str, str]],
     contrast: dict[str, tuple[float, ...]],
+    pairs: dict[tuple[str, str], tuple[float, float]],
 ) -> list[str]:
-    """Compares the contrast table with the ratios of the palette colors."""
+    """Compares the contrast tables with the ratios of the stylesheet."""
     errors = []
-    for name in BACKGROUNDS:
-        if name not in palette:
-            errors.append(f'Background {name} is not in the palette table')
-    if errors:
-        return errors
-    for name in palette:
-        if name not in contrast:
-            errors.append(f'{name} is not in the contrast table')
-    for name, ratios in contrast.items():
-        if name not in palette:
-            errors.append(f'{name} is in the contrast table, not the palette')
-            continue
-        for background, shown in zip(BACKGROUNDS, ratios, strict=True):
-            want = contrast_ratio(palette[name][0], palette[background][0])
-            if f'{want:.2f}' != f'{shown:.2f}':
+    for token, ratios in contrast.items():
+        for (theme, background), shown in zip(
+            CONTRAST_COLUMNS, ratios, strict=True
+        ):
+            colours = source[theme]
+            if token not in colours or background not in colours:
+                errors.append(f'{token}: not in the {theme} theme')
+                continue
+            want = contrast_ratio(colours[token], colours[background])
+            if differs(shown, want):
                 errors.append(
-                    f'{name} on {background}: {shown:.2f} should be {want:.2f}'
+                    f'{token} on {theme} {background}: '
+                    f'{shown:.2f} should be {want:.2f}'
+                )
+    for (foreground, background), ratios in pairs.items():
+        for theme, shown in zip(THEMES, ratios, strict=True):
+            colours = source[theme]
+            if foreground not in colours or background not in colours:
+                errors.append(f'{foreground} on {background}: not in {theme}')
+                continue
+            want = contrast_ratio(colours[foreground], colours[background])
+            if differs(shown, want):
+                errors.append(
+                    f'{foreground} on {background} in {theme}: '
+                    f'{shown:.2f} should be {want:.2f}'
                 )
     return errors
 
 
 def read_source() -> str:
-    """Reads Colors.md from the path in argv, or from GitHub."""
+    """Reads the stylesheet from the path in argv, or from Lrssn-com."""
     if len(sys.argv) > 1:
         return pathlib.Path(sys.argv[1]).read_text()
+    # The host rejects the default Python user agent.
+    request = urllib.request.Request(
+        SOURCE_URL, headers={'User-Agent': 'lrssn-brand-guide-palette-check'}
+    )
     try:
-        with urllib.request.urlopen(COLORS_URL, timeout=30) as response:
+        with urllib.request.urlopen(request, timeout=30) as response:
             text: str = response.read().decode('utf-8')
     except urllib.error.URLError as e:
-        raise SystemExit(f'Cannot fetch {COLORS_URL}: {e}') from e
+        raise SystemExit(f'Cannot fetch {SOURCE_URL}: {e}') from e
     return text
 
 
 def main() -> None:
     """Runs the checks, and exits with 1 if one of them fails."""
     brand = BRAND.read_text()
-    source = parse_source(read_source())
-    palette = parse_palette(brand)
-    if not source:
-        raise SystemExit('Found no colors in Colors.md')
-    if not palette:
-        raise SystemExit(f'Found no palette table in {BRAND.name}')
-    errors = check_palette(source, palette)
-    errors += check_contrast(palette, parse_contrast(brand))
+    stylesheet = read_source()
+    source = {
+        theme: parse_theme(stylesheet, f'theme-{theme}') for theme in THEMES
+    }
+    tokens = parse_tokens(brand)
+    contrast = parse_contrast(brand)
+    pairs = parse_pairs(brand)
+    if not tokens:
+        raise SystemExit(f'Found no colour tables in {BRAND.name}')
+    if not contrast or not pairs:
+        raise SystemExit(f'Found no contrast tables in {BRAND.name}')
+    errors = check_tokens(source, tokens)
+    errors += check_contrast(source, contrast, pairs)
     for error in errors:
         print(error)
     if errors:
         sys.exit(1)
-    print(f'{len(palette)} colors and their contrast ratios match.')
+    print(f'{len(tokens)} colours and their contrast ratios match.')
 
 
 if __name__ == '__main__':
