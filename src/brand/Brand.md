@@ -294,6 +294,7 @@ A link says where it goes.
 
 - [Brand guide on lrssn.com](https://lrssn.com/brand)
 - [Lrssn colour themes](https://github.com/Lrssn-blog/Color-theme)
+- [Lrssn design system](https://github.com/Lrssn-blog/Design-system)
 - [Design system of the website](https://gitea.lrssn.se/Lrssn/Lrssn-com/src/branch/staging/DESIGN_SYSTEM.md)
 - [Design tokens of the website](https://gitea.lrssn.se/Lrssn/Lrssn-com/src/branch/main/src/styles/_variables.scss)
 - [Lrssn style guides](https://github.com/Lrssn-blog/Style-guide)
