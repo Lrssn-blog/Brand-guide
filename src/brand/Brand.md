@@ -3,7 +3,7 @@
 A style guide for the Lrssn brand: its name, logo, colours, type and voice.
 It is for anyone who makes something that carries the brand, such as a web page, a document, a slide or a repository.
 It is a written copy of the public [Brand guide](https://lrssn.com/brand) of the Lrssn website.
-The colours come from the [Lrssn colour themes](https://github.com/Lrssn-blog/ColorTheme), and the typefaces from the website's [design tokens](https://gitea.lrssn.se/Lrssn/Lrssn-com/src/branch/main/src/styles/_variables.scss).
+The colours come from the [Lrssn colour themes](https://github.com/Lrssn-blog/Color-theme), and the typefaces from the website's [design tokens](https://gitea.lrssn.se/Lrssn/Lrssn-com/src/branch/main/src/styles/_variables.scss).
 
 Items marked **TODO** are not decided yet.
 Do not invent an answer for them, and replace the marker once the decision is made.
@@ -111,8 +111,8 @@ Hearth is a cottage on New Year's Eve, warm by the fire while fireworks go off i
 The brand orange is the same in both.
 The secondary colour is tropical teal in the light theme and ice blue in the dark theme.
 
-The values below are the website's tokens from the [Lrssn colour themes](https://github.com/Lrssn-blog/ColorTheme/blob/main/website/_theme.scss), and a check in this repository fails if they differ.
-The themes also cover editors, terminals, the desktop and LaTeX, and their [colour guide](https://github.com/Lrssn-blog/ColorTheme/blob/main/Theme.md) lists every colour.
+The values below are the website's tokens from the [Lrssn colour themes](https://github.com/Lrssn-blog/Color-theme/blob/main/website/_theme.scss), and a check in this repository fails if they differ.
+The themes also cover editors, terminals, the desktop and LaTeX, and their [colour guide](https://github.com/Lrssn-blog/Color-theme/blob/main/Theme.md) lists every colour.
 
 ### Brand colours
 
@@ -293,7 +293,7 @@ A link says where it goes.
 ## See also
 
 - [Brand guide on lrssn.com](https://lrssn.com/brand)
-- [Lrssn colour themes](https://github.com/Lrssn-blog/ColorTheme)
+- [Lrssn colour themes](https://github.com/Lrssn-blog/Color-theme)
 - [Design system of the website](https://gitea.lrssn.se/Lrssn/Lrssn-com/src/branch/staging/DESIGN_SYSTEM.md)
 - [Design tokens of the website](https://gitea.lrssn.se/Lrssn/Lrssn-com/src/branch/main/src/styles/_variables.scss)
 - [Lrssn style guides](https://github.com/Lrssn-blog/Style-guide)

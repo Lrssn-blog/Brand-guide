@@ -2,13 +2,13 @@
 """Checks that the colours in Brand.md match the Lrssn colour themes.
 
 The colours are defined in the maps `$theme-light` (Lrssn Shore) and
-`$theme-dark` (Lrssn Hearth) of website/_theme.scss in the ColorTheme
+`$theme-dark` (Lrssn Hearth) of website/_theme.scss in the Color-theme
 repository, which generates them from its palettes for the Lrssn website.
 The check fails if a colour in Brand.md is missing from the stylesheet or has
 a different value, or if a contrast ratio in Brand.md is wrong.
 
 Usage:
-    scripts/palette.py                 Fetch _theme.scss from ColorTheme.
+    scripts/palette.py                 Fetch _theme.scss from Color-theme.
     scripts/palette.py <_theme.scss>   Use a local copy of the stylesheet.
 """
 
@@ -21,7 +21,7 @@ import urllib.request
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 BRAND = ROOT / 'src' / 'brand' / 'Brand.md'
 SOURCE_URL = (
-    'https://raw.githubusercontent.com/Lrssn-blog/ColorTheme/main/'
+    'https://raw.githubusercontent.com/Lrssn-blog/Color-theme/main/'
     'website/_theme.scss'
 )
 
