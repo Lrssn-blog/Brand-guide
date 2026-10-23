@@ -30,3 +30,11 @@ lychee --config .lychee.toml '**/*.md'
 
 The palette check fetches `website/_theme.scss` from the `main` branch of the Color-theme repository.
 Pass the path of a local copy to use that instead, for example `scripts/palette.py ../Color-theme/website/_theme.scss`.
+
+## Licence
+
+Copyright (C) 2026 Lrssn-blog.
+
+The brand guide is licensed under the [Creative Commons Attribution-ShareAlike 4.0 International License](./LICENSE) (CC BY-SA 4.0).
+The scripts in `scripts/` are free software: you can redistribute them and modify them under the terms of the [GNU Affero General Public License](./LICENSE-CODE), either version 3 of the License or (at your option) any later version.
+Neither licence gives permission to use the Lrssn name or logo.
