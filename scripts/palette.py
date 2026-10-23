@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
-"""Checks that the colours in Brand.md match the Lrssn website's tokens.
+"""Checks that the colours in Brand.md match the Lrssn colour themes.
 
-The colours are defined in the maps `$theme-light` and `$theme-dark` of
-src/styles/_variables.scss in the Lrssn-com repository.
+The colours are defined in the maps `$theme-light` (Lrssn Shore) and
+`$theme-dark` (Lrssn Hearth) of website/_theme.scss in the Color-theme
+repository, which generates them from its palettes for the Lrssn website.
 The check fails if a colour in Brand.md is missing from the stylesheet or has
 a different value, or if a contrast ratio in Brand.md is wrong.
 
 Usage:
-    scripts/palette.py                 Fetch _variables.scss from Lrssn-com.
-    scripts/palette.py <_variables.scss>
-                                       Use a local copy of the stylesheet.
+    scripts/palette.py                 Fetch _theme.scss from Color-theme.
+    scripts/palette.py <_theme.scss>   Use a local copy of the stylesheet.
 """
 
 import pathlib
@@ -21,8 +21,8 @@ import urllib.request
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 BRAND = ROOT / 'src' / 'brand' / 'Brand.md'
 SOURCE_URL = (
-    'https://gitea.lrssn.se/Lrssn/Lrssn-com/raw/branch/main/'
-    'src/styles/_variables.scss'
+    'https://raw.githubusercontent.com/Lrssn-blog/Color-theme/main/'
+    'website/_theme.scss'
 )
 
 # The columns of the first contrast table: the theme and the background.
@@ -184,7 +184,7 @@ def read_source() -> str:
     """Reads the stylesheet from the path in argv, or from Lrssn-com."""
     if len(sys.argv) > 1:
         return pathlib.Path(sys.argv[1]).read_text()
-    # The host rejects the default Python user agent.
+    # Name the check, since some hosts reject the default Python user agent.
     request = urllib.request.Request(
         SOURCE_URL, headers={'User-Agent': 'lrssn-brand-guide-palette-check'}
     )

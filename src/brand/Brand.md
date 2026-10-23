@@ -2,7 +2,8 @@
 
 A style guide for the Lrssn brand: its name, logo, colours, type and voice.
 It is for anyone who makes something that carries the brand, such as a web page, a document, a slide or a repository.
-It is a written copy of the public [Brand guide](https://lrssn.com/brand) of the Lrssn website, and the colours and typefaces come from the website's [design tokens](https://gitea.lrssn.se/Lrssn/Lrssn-com/src/branch/main/src/styles/_variables.scss).
+It is a written copy of the public [Brand guide](https://lrssn.com/brand) of the Lrssn website.
+The colours come from the [Lrssn colour themes](https://github.com/Lrssn-blog/Color-theme), and the typefaces from the website's [design tokens](https://gitea.lrssn.se/Lrssn/Lrssn-com/src/branch/main/src/styles/_variables.scss).
 
 Items marked **TODO** are not decided yet.
 Do not invent an answer for them, and replace the marker once the decision is made.
@@ -16,7 +17,8 @@ Do not invent an answer for them, and replace the marker once the decision is ma
 - **Be consistent.**
   The same name, colours and voice everywhere make the brand easy to recognise.
 - **Have one source for each fact.**
-  The colours and typefaces are defined in the website's stylesheet, and this guide is checked against it.
+  The colours are defined in the Lrssn colour themes, and the typefaces in the website's stylesheet.
+  The colours in this guide are checked against the themes.
 - **Be accessible.**
   A colour or a style that a person cannot read is not on brand.
 - **Put whitespace first.**
@@ -103,11 +105,14 @@ They are named `lrssn-logo-<colour>.<format>`, for example `lrssn-logo-orange.sv
 
 ## Colours
 
-Every colour comes in a light theme and a dark theme.
+Every colour comes in a light theme, **Lrssn Shore**, and a dark theme, **Lrssn Hearth**.
+Shore is a summer evening on a beach, with a bonfire, clear tropical water and coral.
+Hearth is a cottage on New Year's Eve, warm by the fire while fireworks go off in the cold outside.
 The brand orange is the same in both.
-The secondary colour is tropical teal in the light theme and forest green in the dark theme.
+The secondary colour is tropical teal in the light theme and ice blue in the dark theme.
 
-The values below are copied from the website's [design tokens](https://gitea.lrssn.se/Lrssn/Lrssn-com/src/branch/main/src/styles/_variables.scss), and a check in this repository fails if they differ.
+The values below are the website's tokens from the [Lrssn colour themes](https://github.com/Lrssn-blog/Color-theme/blob/main/website/_theme.scss), and a check in this repository fails if they differ.
+The themes also cover editors, terminals, the desktop and LaTeX, and their [colour guide](https://github.com/Lrssn-blog/Color-theme/blob/main/Theme.md) lists every colour.
 
 ### Brand colours
 
@@ -115,28 +120,28 @@ The values below are copied from the website's [design tokens](https://gitea.lrs
 | --- | --- | --- | --- |
 | `primary-color` | `#fc6600` | `#fc6600` | Brand orange: the logo, buttons, fills and borders. Not for text. |
 | `primary-text` | `#b04600` | `#ff8a3d` | Orange text and links. |
-| `primary-soft` | `#ffe8d6` | `#3a1f0e` | Apricot tint for selection and quiet highlights. |
-| `secondary-color` | `#00999a` | `#3e8a58` | The cool accent: fills, borders and bars only. |
-| `secondary-text` | `#00737a` | `#7fc495` | Text in the secondary colour. |
-| `secondary-soft` | `#d4f2ef` | `#14261b` | Tint behind secondary text. |
+| `primary-soft` | `#ffe3cc` | `#3a1f0e` | Apricot tint for selection and quiet highlights. |
+| `secondary-color` | `#00999a` | `#4d94b8` | The cool accent: fills, borders and bars only. |
+| `secondary-text` | `#00737a` | `#8cc8e3` | Text in the secondary colour. |
+| `secondary-soft` | `#d2f1ee` | `#142430` | Tint behind secondary text. |
 
 ### Neutrals
 
 | Token | Light | Dark | Use |
 | --- | --- | --- | --- |
-| `background` | `#f6f7f9` | `#0f1216` | The page. |
-| `surface` | `#ffffff` | `#161a20` | Cards, panels and inputs. |
-| `border-color` | `#dde2e8` | `#262c34` | Borders and dividers. |
-| `text-color` | `#14171c` | `#edf0f4` | Headings and strong text. |
-| `text-muted` | `#56606c` | `#9ea7b2` | Secondary text. |
+| `background` | `#fdf6ea` | `#1a1512` | The page. |
+| `surface` | `#fffbf4` | `#211a16` | Cards, panels and inputs. |
+| `border-color` | `#e3d3b9` | `#2e343c` | Borders and dividers. |
+| `text-color` | `#13303d` | `#f0e3d0` | Headings and strong text. |
+| `text-muted` | `#4f6470` | `#a3aebb` | Secondary text. |
 | `text-on-primary` | `#14171c` | `#14171c` | Text on an orange fill. Never white. |
 
 ### Status colours
 
 | Token | Light | Dark | Use |
 | --- | --- | --- | --- |
-| `success-color` | `#2e6b3a` | `#7cc68a` | Success. |
-| `danger-color` | `#b3261e` | `#f2867e` | Errors and danger. |
+| `success-color` | `#1c7448` | `#a9d48f` | Success. |
+| `danger-color` | `#c4262e` | `#ff6b5e` | Errors and danger. |
 
 ### Using the colours
 
@@ -144,14 +149,14 @@ The values below are copied from the website's [design tokens](https://gitea.lrs
   The brand orange is too light for text on a light background.
 - Use `text-on-primary` for text on an orange fill, and never white.
 - Use `primary-color` as a fill at most once per screen.
-- Keep the neutrals cool, towards blue-grey.
-  Do not use warm or beige greys, because they make the brand read as brown.
+- Keep the surfaces warm: sand in the light theme and timber in the dark theme.
+  Do not use plain or cool greys for surfaces, because they lose the warmth of the bonfire and the hearth.
 - Always write the status in words, as well as showing it in a colour.
 - Do not add colours that are not in this guide.
 
 ### Themes
 
-- The website has three settings: **System**, which is the default and follows the device, **Light** and **Dark**.
+- The website has three settings: **System**, which is the default and follows the device, **Light**, which is Lrssn Shore, and **Dark**, which is Lrssn Hearth.
 - Check every new screen in both themes.
 - Paper is light whatever the theme, so print uses the light values.
 
@@ -164,25 +169,25 @@ Large text is 24 px or more, or 19 px or more in bold.
 
 | Token | Light page | Light surface | Dark page | Dark surface |
 | --- | --- | --- | --- | --- |
-| `text-color` | 16.76 | 17.96 | 16.43 | 15.27 |
-| `text-muted` | 5.96 | 6.39 | 7.71 | 7.17 |
-| `primary-text` | 5.26 | 5.64 | 8.01 | 7.45 |
-| `secondary-text` | 5.25 | 5.63 | 9.15 | 8.51 |
-| `success-color` | 5.97 | 6.40 | 9.21 | 8.57 |
-| `danger-color` | 6.10 | 6.54 | 7.59 | 7.06 |
-| `primary-color` | 2.78 | 2.98 | 6.29 | 5.85 |
-| `secondary-color` | 3.25 | 3.49 | 4.45 | 4.14 |
+| `text-color` | 12.88 | 13.41 | 14.31 | 13.56 |
+| `text-muted` | 5.77 | 6.01 | 8.04 | 7.62 |
+| `primary-text` | 5.25 | 5.47 | 7.72 | 7.32 |
+| `secondary-text` | 5.24 | 5.45 | 9.90 | 9.38 |
+| `success-color` | 5.37 | 5.59 | 10.78 | 10.21 |
+| `danger-color` | 5.34 | 5.56 | 6.48 | 6.14 |
+| `primary-color` | 2.78 | 2.89 | 6.07 | 5.75 |
+| `secondary-color` | 3.25 | 3.38 | 5.38 | 5.10 |
 
 Every text token reaches 4.5 on the page and on the surface, in both themes.
-`primary-color` and `secondary-color` do not, so they are for fills, borders and bars, and never for text.
+`primary-color` and `secondary-color` do not reach 4.5 in the light theme, so they are for fills, borders and bars, and never for text.
 
 The same ratios for text on a tint or a fill:
 
 | Pair | Light | Dark |
 | --- | --- | --- |
 | `text-on-primary` on `primary-color` | 6.02 | 6.02 |
-| `primary-text` on `primary-soft` | 4.77 | 6.48 |
-| `secondary-text` on `secondary-soft` | 4.75 | 7.74 |
+| `primary-text` on `primary-soft` | 4.60 | 6.48 |
+| `secondary-text` on `secondary-soft` | 4.70 | 8.67 |
 
 ## Typography
 
@@ -280,7 +285,7 @@ A link says where it goes.
 | Orange text in `primary-color` | Use `primary-text`. |
 | White text on an orange fill | Use `text-on-primary`. |
 | More than one orange fill on a screen | Keep one fill, and use a thin rule or an underline for the rest. |
-| Warm or beige greys | Use the cool, blue-grey neutrals. |
+| Plain or cool grey surfaces | Use the warm sand and timber neutrals. |
 | A status shown by colour alone | Add words. |
 | A gradient, a decorative icon or an emoji | Let type and space do the work. |
 | Hype, exclamation marks and "we" | Write plainly, as one person. |
@@ -288,6 +293,7 @@ A link says where it goes.
 ## See also
 
 - [Brand guide on lrssn.com](https://lrssn.com/brand)
+- [Lrssn colour themes](https://github.com/Lrssn-blog/Color-theme)
 - [Design system of the website](https://gitea.lrssn.se/Lrssn/Lrssn-com/src/branch/staging/DESIGN_SYSTEM.md)
 - [Design tokens of the website](https://gitea.lrssn.se/Lrssn/Lrssn-com/src/branch/main/src/styles/_variables.scss)
 - [Lrssn style guides](https://github.com/Lrssn-blog/Style-guide)
