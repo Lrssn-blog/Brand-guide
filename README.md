@@ -2,6 +2,7 @@
 
 This repo holds the Lrssn brand guide.
 It is a companion to the [Lrssn style guides](https://github.com/Lrssn-blog/Style-guide).
+The [Lrssn design system](https://github.com/Lrssn-blog/Design-system) turns this guide and the colour themes into tokens and components that a page can use.
 
 ## [Brand](./src/brand/Brand.md)
 
