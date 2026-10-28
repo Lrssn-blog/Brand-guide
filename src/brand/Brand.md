@@ -107,7 +107,7 @@ They are named `lrssn-logo-<colour>.<format>`, for example `lrssn-logo-orange.sv
 
 Every colour comes in a light theme, **Lrssn Shore**, and a dark theme, **Lrssn Hearth**.
 Shore is a summer evening on a beach, with a bonfire, clear tropical water and coral.
-Hearth is a cottage on New Year's Eve, warm by the fire while fireworks go off in the cold outside.
+Hearth is a cottage on New Year's Eve, warm by the fire while fireworks go off over the forest in the cold outside.
 The brand orange is the same in both.
 The secondary colour is tropical teal in the light theme and ice blue in the dark theme.
 
@@ -129,8 +129,8 @@ The themes also cover editors, terminals, the desktop and LaTeX, and their [colo
 
 | Token | Light | Dark | Use |
 | --- | --- | --- | --- |
-| `background` | `#fdf6ea` | `#1a1512` | The page. |
-| `surface` | `#fffbf4` | `#211a16` | Cards, panels and inputs. |
+| `background` | `#fdf6ea` | `#101a16` | The page. |
+| `surface` | `#fffbf4` | `#15211c` | Cards, panels and inputs. |
 | `border-color` | `#e3d3b9` | `#2e343c` | Borders and dividers. |
 | `text-color` | `#13303d` | `#f0e3d0` | Headings and strong text. |
 | `text-muted` | `#4f6470` | `#a3aebb` | Secondary text. |
@@ -149,7 +149,7 @@ The themes also cover editors, terminals, the desktop and LaTeX, and their [colo
   The brand orange is too light for text on a light background.
 - Use `text-on-primary` for text on an orange fill, and never white.
 - Use `primary-color` as a fill at most once per screen.
-- Keep the surfaces warm: sand in the light theme and timber in the dark theme.
+- Keep the surfaces warm: sand in the light theme and forest green in the dark theme.
   Do not use plain or cool greys for surfaces, because they lose the warmth of the bonfire and the hearth.
 - Always write the status in words, as well as showing it in a colour.
 - Do not add colours that are not in this guide.
@@ -169,14 +169,14 @@ Large text is 24 px or more, or 19 px or more in bold.
 
 | Token | Light page | Light surface | Dark page | Dark surface |
 | --- | --- | --- | --- | --- |
-| `text-color` | 12.88 | 13.41 | 14.31 | 13.56 |
-| `text-muted` | 5.77 | 6.01 | 8.04 | 7.62 |
-| `primary-text` | 5.25 | 5.47 | 7.72 | 7.32 |
-| `secondary-text` | 5.24 | 5.45 | 9.90 | 9.38 |
-| `success-color` | 5.37 | 5.59 | 10.78 | 10.21 |
-| `danger-color` | 5.34 | 5.56 | 6.48 | 6.14 |
-| `primary-color` | 2.78 | 2.89 | 6.07 | 5.75 |
-| `secondary-color` | 3.25 | 3.38 | 5.38 | 5.10 |
+| `text-color` | 12.88 | 13.41 | 14.05 | 13.11 |
+| `text-muted` | 5.77 | 6.01 | 7.90 | 7.37 |
+| `primary-text` | 5.25 | 5.47 | 7.58 | 7.07 |
+| `secondary-text` | 5.24 | 5.45 | 9.72 | 9.07 |
+| `success-color` | 5.37 | 5.59 | 10.58 | 9.87 |
+| `danger-color` | 5.34 | 5.56 | 6.36 | 5.94 |
+| `primary-color` | 2.78 | 2.89 | 5.96 | 5.56 |
+| `secondary-color` | 3.25 | 3.38 | 5.29 | 4.93 |
 
 Every text token reaches 4.5 on the page and on the surface, in both themes.
 `primary-color` and `secondary-color` do not reach 4.5 in the light theme, so they are for fills, borders and bars, and never for text.
@@ -285,7 +285,7 @@ A link says where it goes.
 | Orange text in `primary-color` | Use `primary-text`. |
 | White text on an orange fill | Use `text-on-primary`. |
 | More than one orange fill on a screen | Keep one fill, and use a thin rule or an underline for the rest. |
-| Plain or cool grey surfaces | Use the warm sand and timber neutrals. |
+| Plain or cool grey surfaces | Use the warm sand and forest green neutrals. |
 | A status shown by colour alone | Add words. |
 | A gradient, a decorative icon or an emoji | Let type and space do the work. |
 | Hype, exclamation marks and "we" | Write plainly, as one person. |
